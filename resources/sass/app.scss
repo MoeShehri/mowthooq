@@ -1,0 +1,202 @@
+// Arabic Fonts from Google Fonts
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import 'bootstrap/scss/bootstrap';
+
+// Custom Arabic RTL Styles
+body {
+    font-family: 'Tajawal', 'Cairo', sans-serif;
+    direction: rtl;
+    text-align: right;
+}
+
+// Custom RTL fixes
+.navbar-brand {
+    margin-left: 0;
+    margin-right: 1rem;
+}
+
+.dropdown-menu {
+    right: 0;
+    left: auto;
+}
+
+// Arabic number styling
+.arabic-numbers {
+    font-feature-settings: "lnum";
+    font-variant-numeric: lining-nums;
+}
+
+// Custom colors for Saudi theme
+:root {
+    --bs-primary: #1e7e34;
+    --bs-secondary: #6c757d;
+    --bs-success: #28a745;
+    --bs-info: #17a2b8;
+    --bs-warning: #ffc107;
+    --bs-danger: #dc3545;
+    --bs-light: #f8f9fa;
+    --bs-dark: #343a40;
+    --saudi-green: #1e7e34;
+    --saudi-gold: #ffd700;
+}
+
+// Dashboard specific styles
+.dashboard-card {
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.stats-card {
+    background: linear-gradient(135deg, var(--bs-primary) 0%, #2d8f47 100%);
+    color: white;
+    border: none;
+}
+
+.stats-card .card-body {
+    padding: 2rem;
+}
+
+.stats-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.stats-label {
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+// Navigation styles
+.navbar-custom {
+    background: linear-gradient(90deg, var(--saudi-green) 0%, #2d8f47 100%);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.navbar-custom .navbar-brand {
+    color: white !important;
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.navbar-custom .nav-link {
+    color: rgba(255,255,255,0.9) !important;
+    font-weight: 500;
+}
+
+.navbar-custom .nav-link:hover {
+    color: white !important;
+}
+
+// Sidebar styles
+.sidebar {
+    background: #f8f9fa;
+    min-height: calc(100vh - 76px);
+    border-left: 1px solid #dee2e6;
+}
+
+.sidebar .nav-link {
+    color: #495057;
+    padding: 0.75rem 1rem;
+    border-radius: 5px;
+    margin-bottom: 0.25rem;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #e9ecef;
+    color: var(--bs-primary);
+}
+
+.sidebar .nav-link.active {
+    background-color: var(--bs-primary);
+    color: white;
+}
+
+// Form styles
+.form-control:focus {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.2rem rgba(30, 126, 52, 0.25);
+}
+
+.btn-primary {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+}
+
+.btn-primary:hover {
+    background-color: #1a6e2e;
+    border-color: #1a6e2e;
+}
+
+// Table styles
+.table-custom {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.table-custom thead {
+    background-color: var(--bs-primary);
+    color: white;
+}
+
+// Badge styles
+.badge-status-pending {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.badge-status-under-review {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.badge-status-completed {
+    background-color: #28a745;
+    color: white;
+}
+
+.badge-status-rejected {
+    background-color: #dc3545;
+    color: white;
+}
+
+.badge-status-cancelled {
+    background-color: #6c757d;
+    color: white;
+}
+
+// Animation classes
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+    .sidebar {
+        min-height: auto;
+        border-left: none;
+        border-top: 1px solid #dee2e6;
+    }
+    
+    .stats-number {
+        font-size: 2rem;
+    }
+}
