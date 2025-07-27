@@ -1516,4 +1516,4 @@
 </body>
 </html>
 
-<?php /**PATH C:\laragon\www\mowthook-dashboard\resources\views/welcome.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\laragon\www\mowthook-dashboard\resources\views\welcome.blade.php ENDPATH**/ ?>

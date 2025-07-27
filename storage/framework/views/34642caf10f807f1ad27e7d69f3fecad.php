@@ -93,4 +93,4 @@
 </body>
 </html>
 
-<?php /**PATH C:\laragon\www\mowthook-dashboard\resources\views/layouts/app.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\laragon\www\mowthook-dashboard\resources\views\layouts\app.blade.php ENDPATH**/ ?>

@@ -692,15 +692,15 @@
                                 </div>
                             </div>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>الملف الشخصي</a></li>
-                                <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>الإعدادات</a></li>
+                                <li><a class="dropdown-item" href="<?php echo e(route('profile.show')); ?>"><i class="fas fa-user me-2"></i>الملف الشخصي</a></li>
+                                <li><a class="dropdown-item" href="<?php echo e(route('profile.settings')); ?>"><i class="fas fa-cog me-2"></i>الإعدادات</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
-                                    <form method="POST" action="<?php echo e(route('logout')); ?>">
+                                    <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        <i class="fas fa-sign-out-alt me-2"></i>تسجيل الخروج
+                                    </a>
+                                    <form id="logout-form" action="<?php echo e(route('logout')); ?>" method="POST" class="d-none">
                                         <?php echo csrf_field(); ?>
-                                        <button type="submit" class="dropdown-item">
-                                            <i class="fas fa-sign-out-alt me-2"></i>تسجيل الخروج
-                                        </button>
                                     </form>
                                 </li>
                             </ul>
@@ -760,6 +760,21 @@
                             </a>
                         </li>
                         <?php endif; ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?php echo e(route('welcome')); ?>">
+                                <i class="fas fa-home"></i>
+                                الصفحة الرئيسية
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="event.preventDefault(); document.getElementById('logout-form-sidebar').submit();">
+                                <i class="fas fa-sign-out-alt"></i>
+                                تسجيل الخروج
+                            </a>
+                            <form id="logout-form-sidebar" action="<?php echo e(route('logout')); ?>" method="POST" class="d-none">
+                                <?php echo csrf_field(); ?>
+                            </form>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -841,4 +856,4 @@
 </body>
 </html>
 
-<?php /**PATH C:\laragon\www\mowthook-dashboard\resources\views/layouts/dashboard-modern.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\laragon\www\mowthook-dashboard\resources\views\layouts\dashboard.blade.php ENDPATH**/ ?>

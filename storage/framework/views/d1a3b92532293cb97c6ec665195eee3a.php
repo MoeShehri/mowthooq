@@ -1,15 +1,19 @@
-<?php $__env->startSection('title', 'إنشاء معاملة جديدة'); ?>
+<?php $__env->startSection('title', 'تعديل المعاملة - ' . $transaction->transaction_number); ?>
 
 <?php $__env->startSection('page-header'); ?>
 <div>
-    <h1 class="h2 mb-0">إنشاء معاملة جديدة</h1>
-    <p class="text-muted mb-0">قم بملء البيانات المطلوبة وإرفاق المستندات اللازمة</p>
+    <h1 class="h2 mb-0">تعديل المعاملة</h1>
+    <p class="text-muted mb-0"><?php echo e($transaction->transaction_number); ?></p>
 </div>
 <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group">
-        <a href="<?php echo e(route('transactions.index')); ?>" class="btn btn-outline-secondary">
+        <a href="<?php echo e(route('transactions.show', $transaction)); ?>" class="btn btn-outline-secondary">
             <i class="fas fa-arrow-right me-1"></i>
-            العودة للمعاملات
+            العودة للمعاملة
+        </a>
+        <a href="<?php echo e(route('transactions.index')); ?>" class="btn btn-outline-secondary">
+            <i class="fas fa-list me-1"></i>
+            جميع المعاملات
         </a>
     </div>
 </div>
@@ -22,13 +26,19 @@
             <div class="card dashboard-card">
                 <div class="card-header">
                     <h5 class="card-title mb-0">
-                        <i class="fas fa-plus-circle me-2"></i>
-                        بيانات المعاملة الجديدة
+                        <i class="fas fa-edit me-2"></i>
+                        تعديل بيانات المعاملة
                     </h5>
                 </div>
                 <div class="card-body">
-                    <form action="<?php echo e(route('transactions.store')); ?>" method="POST" enctype="multipart/form-data" id="transactionForm">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        يمكنك تعديل المعاملة فقط عندما تكون في حالة "قيد الانتظار". بعد بدء المراجعة لن تتمكن من التعديل.
+                    </div>
+
+                    <form action="<?php echo e(route('transactions.update', $transaction)); ?>" method="POST" enctype="multipart/form-data" id="transactionForm">
                         <?php echo csrf_field(); ?>
+                        <?php echo method_field('PUT'); ?>
                         
                         <div class="row">
                             <!-- Transaction Type -->
@@ -50,13 +60,13 @@ unset($__errorArgs, $__bag); ?>"
                                     <?php $__currentLoopData = $transactionTypes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $typeAr => $typeEn): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <option value="<?php echo e($typeAr); ?>" 
                                                 data-type-en="<?php echo e($typeEn); ?>"
-                                                <?php echo e(old('type_ar') == $typeAr ? 'selected' : ''); ?>>
+                                                <?php echo e((old('type_ar', $transaction->type_ar) == $typeAr) ? 'selected' : ''); ?>>
                                             <?php echo e($typeAr); ?>
 
                                         </option>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>
-                                <input type="hidden" name="type_en" id="type_en" value="<?php echo e(old('type_en')); ?>">
+                                <input type="hidden" name="type_en" id="type_en" value="<?php echo e(old('type_en', $transaction->type_en)); ?>">
                                 <?php $__errorArgs = ['type_ar'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -87,7 +97,7 @@ unset($__errorArgs, $__bag); ?>"
                                     <option value="">اختر البلدية</option>
                                     <?php $__currentLoopData = $municipalities; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $municipality): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <option value="<?php echo e($municipality); ?>" 
-                                                <?php echo e(old('municipality_ar') == $municipality ? 'selected' : ''); ?>>
+                                                <?php echo e((old('municipality_ar', $transaction->municipality_ar) == $municipality) ? 'selected' : ''); ?>>
                                             <?php echo e($municipality); ?>
 
                                         </option>
@@ -121,7 +131,7 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>" 
                                       id="description_ar" name="description_ar" rows="4" 
-                                      placeholder="اكتب وصفاً مفصلاً للمعاملة المطلوبة..." required><?php echo e(old('description_ar')); ?></textarea>
+                                      placeholder="اكتب وصفاً مفصلاً للمعاملة المطلوبة..." required><?php echo e(old('description_ar', $transaction->description_ar)); ?></textarea>
                             <div class="form-text">
                                 يرجى كتابة وصف واضح ومفصل للمعاملة المطلوبة لتسهيل عملية المراجعة
                             </div>
@@ -154,16 +164,16 @@ endif;
 unset($__errorArgs, $__bag); ?>" 
                                         id="priority" name="priority" required>
                                     <option value="">اختر الأولوية</option>
-                                    <option value="low" <?php echo e(old('priority') == 'low' ? 'selected' : ''); ?>>
+                                    <option value="low" <?php echo e((old('priority', $transaction->priority) == 'low') ? 'selected' : ''); ?>>
                                         منخفضة
                                     </option>
-                                    <option value="normal" <?php echo e(old('priority') == 'normal' ? 'selected' : ''); ?>>
+                                    <option value="normal" <?php echo e((old('priority', $transaction->priority) == 'normal') ? 'selected' : ''); ?>>
                                         عادية
                                     </option>
-                                    <option value="high" <?php echo e(old('priority') == 'high' ? 'selected' : ''); ?>>
+                                    <option value="high" <?php echo e((old('priority', $transaction->priority) == 'high') ? 'selected' : ''); ?>>
                                         عالية
                                     </option>
-                                    <option value="urgent" <?php echo e(old('priority') == 'urgent' ? 'selected' : ''); ?>>
+                                    <option value="urgent" <?php echo e((old('priority', $transaction->priority) == 'urgent') ? 'selected' : ''); ?>>
                                         عاجلة
                                     </option>
                                 </select>
@@ -186,15 +196,64 @@ unset($__errorArgs, $__bag); ?>
                                     ملاحظات إضافية
                                 </label>
                                 <textarea class="form-control" id="notes" name="notes" rows="3" 
-                                          placeholder="أي ملاحظات إضافية..."><?php echo e(old('notes')); ?></textarea>
+                                          placeholder="أي ملاحظات إضافية..."><?php echo e(old('notes', $transaction->notes)); ?></textarea>
                             </div>
                         </div>
 
-                        <!-- File Attachments -->
+                        <!-- Current Attachments -->
+                        <?php if($transaction->attachments->count() > 0): ?>
+                            <div class="mb-4">
+                                <label class="form-label">
+                                    <i class="fas fa-paperclip me-1"></i>
+                                    المرفقات الحالية
+                                </label>
+                                <div class="border rounded p-3 bg-light">
+                                    <div class="row">
+                                        <?php $__currentLoopData = $transaction->attachments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $attachment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <div class="col-md-6 col-lg-4 mb-3">
+                                                <div class="card border">
+                                                    <div class="card-body p-2">
+                                                        <div class="d-flex align-items-center">
+                                                            <?php if(str_starts_with($attachment->mime_type, 'image/')): ?>
+                                                                <i class="fas fa-file-image fa-2x me-2 text-primary"></i>
+                                                            <?php elseif($attachment->mime_type == 'application/pdf'): ?>
+                                                                <i class="fas fa-file-pdf fa-2x me-2 text-danger"></i>
+                                                            <?php elseif(str_contains($attachment->mime_type, 'word')): ?>
+                                                                <i class="fas fa-file-word fa-2x me-2 text-primary"></i>
+                                                            <?php else: ?>
+                                                                <i class="fas fa-file fa-2x me-2 text-secondary"></i>
+                                                            <?php endif; ?>
+                                                            <div class="flex-grow-1">
+                                                                <h6 class="card-title mb-1 small"><?php echo e($attachment->original_name); ?></h6>
+                                                                <p class="card-text small text-muted mb-0">
+                                                                    <?php echo e(number_format($attachment->file_size / 1024 / 1024, 2)); ?> ميجابايت
+                                                                </p>
+                                                                <div class="btn-group btn-group-sm mt-1">
+                                                                    <a href="<?php echo e(Storage::url($attachment->file_path)); ?>" 
+                                                                       class="btn btn-outline-primary btn-sm" target="_blank">
+                                                                        <i class="fas fa-eye"></i>
+                                                                    </a>
+                                                                    <button type="button" class="btn btn-outline-danger btn-sm" 
+                                                                            onclick="deleteAttachment(<?php echo e($attachment->id); ?>)">
+                                                                        <i class="fas fa-trash"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+
+                        <!-- Add New Attachments -->
                         <div class="mb-4">
                             <label class="form-label">
-                                <i class="fas fa-paperclip me-1"></i>
-                                المرفقات والمستندات
+                                <i class="fas fa-plus me-1"></i>
+                                إضافة مرفقات جديدة
                             </label>
                             <div class="border rounded p-3 bg-light">
                                 <div class="mb-3">
@@ -226,35 +285,21 @@ unset($__errorArgs, $__bag); ?>
 
                                 <!-- File Preview Area -->
                                 <div id="filePreview" class="mt-3" style="display: none;">
-                                    <h6 class="text-muted">الملفات المحددة:</h6>
+                                    <h6 class="text-muted">الملفات الجديدة المحددة:</h6>
                                     <div id="fileList" class="row"></div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Required Documents Info -->
-                        <div class="alert alert-info">
-                            <h6 class="alert-heading">
-                                <i class="fas fa-info-circle me-2"></i>
-                                المستندات المطلوبة عادة:
-                            </h6>
-                            <ul class="mb-0">
-                                <li>صورة من الهوية الوطنية أو الإقامة</li>
-                                <li>صورة من السجل التجاري (للمؤسسات)</li>
-                                <li>المخططات والرسوم الهندسية (للرخص الهندسية)</li>
-                                <li>أي مستندات أخرى متعلقة بنوع المعاملة</li>
-                            </ul>
-                        </div>
-
                         <!-- Submit Buttons -->
                         <div class="d-flex justify-content-between">
-                            <a href="<?php echo e(route('transactions.index')); ?>" class="btn btn-secondary">
+                            <a href="<?php echo e(route('transactions.show', $transaction)); ?>" class="btn btn-secondary">
                                 <i class="fas fa-times me-1"></i>
                                 إلغاء
                             </a>
                             <button type="submit" class="btn btn-primary" id="submitBtn">
-                                <i class="fas fa-paper-plane me-1"></i>
-                                إرسال المعاملة
+                                <i class="fas fa-save me-1"></i>
+                                حفظ التعديلات
                             </button>
                         </div>
                     </form>
@@ -271,6 +316,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle transaction type selection
     const typeSelect = document.getElementById('type_ar');
     const typeEnInput = document.getElementById('type_en');
+    
+    // Set initial value
+    const selectedOption = typeSelect.options[typeSelect.selectedIndex];
+    if (selectedOption) {
+        typeEnInput.value = selectedOption.dataset.typeEn || '';
+    }
     
     typeSelect.addEventListener('change', function() {
         const selectedOption = this.options[this.selectedIndex];
@@ -321,7 +372,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     form.addEventListener('submit', function() {
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>جاري الإرسال...';
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>جاري الحفظ...';
     });
 
     // File icon helper function
@@ -351,8 +402,32 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+function deleteAttachment(attachmentId) {
+    if (confirm('هل أنت متأكد من حذف هذا الملف؟ لا يمكن التراجع عن هذا الإجراء.')) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `/transactions/attachments/${attachmentId}`;
+        
+        const csrfToken = document.createElement('input');
+        csrfToken.type = 'hidden';
+        csrfToken.name = '_token';
+        csrfToken.value = '<?php echo e(csrf_token()); ?>';
+        
+        const methodField = document.createElement('input');
+        methodField.type = 'hidden';
+        methodField.name = '_method';
+        methodField.value = 'DELETE';
+        
+        form.appendChild(csrfToken);
+        form.appendChild(methodField);
+        
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
 </script>
 <?php $__env->stopPush(); ?>
 
 
-<?php echo $__env->make('layouts.dashboard', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\mowthook-dashboard\resources\views/transactions/create.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.dashboard', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\mowthook-dashboard\resources\views\transactions\edit.blade.php ENDPATH**/ ?>
